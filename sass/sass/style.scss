@@ -1,0 +1,34 @@
+@import "normalize";
+
+html{
+	background:#ccc;
+}
+
+
+h3,ol,ul,li{
+	font-family:"Microsoft Yahei"
+};
+
+
+h3{
+	font-weight:bold;
+}
+a{
+	font-family:inherit;
+	color:#FFF;
+	text-decoration:none;
+	&:hover{
+		text-shadow: 2px 2px 2px #000;
+	}
+}
+ul{
+	list-style-type:none;
+}
+
+ul >li{
+	padding-left:20px;
+}
+
+ol >li{
+	padding-left:50px;
+}
