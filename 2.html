@@ -1105,6 +1105,7 @@ border-radius=r<br />
     linear-gradient<br />
     background-size</p>
 <p>一般实现有纹理的背景，方式主要为1px的位图的repeat或者使用svg背景</p>
+<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>水平渐变</h3>
 <p>设置背景的渐变色</p>
 <pre><code>background: linear-gradient(#fb3, #58a);
 </code></pre>
@@ -1112,4 +1113,185 @@ border-radius=r<br />
 <p>设置渐变色的起始点</p>
 <pre><code>background: linear-gradient(#fb3 20%, #58a 80%);
 </code></pre>
-<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-22_183712.png" /></p></article></body></html>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-22_183712.png" /></p>
+<p>如果渐变的起始点在同一处，则渐变效果消失，效果为两条平行的颜色带</p>
+<pre><code>background: linear-gradient(#fb3 50%, #58a 50%);
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_084550.png" /></p>
+<p>设置渐变其实是设置背景图像background-image,所以可以设置background-size的值来设置渐变的图像的大小</p>
+<pre><code>background: linear-gradient(#fb3 50%, #58a 50%);
+background-size: 100% 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_085953.png" /></p>
+<p>如果后一个渐变色的起点小于之前的起点，后一个渐变色的起点将默认设置为之前起点值的最大值</p>
+<pre><code>background: linear-gradient(#fb3 30%, #58a 0);
+background-size: 100% 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_085846.png" /></p>
+<p>当然可以设置多个渐变色</p>
+<pre><code>background: linear-gradient(#fb3 33.3%,#58a 0,
+                            #58a 66.6%, yellowgreen 0);
+background-size: 100% 45px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_090132.png" /></p>
+<h3 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>垂直条纹</h3>
+<p>之前设置的条纹背景都是水平方向上的，当然也可以设置为垂直方向上的，主要是设置渐变的方向，默认渐变的方向为to bottom</p>
+<pre><code>background: linear-gradient(to right, /* or 90deg */
+                            #fb3 50%, #58a 0);
+background-size: 30px 100%;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_090652.png" /></p>
+<h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>斜条纹</h3>
+<p>同样是设置渐变的方向</p>
+<pre><code>background: linear-gradient(45deg,
+#fb3 50%, #58a 0);
+background-size: 30px 30px;
+当效果并非理想的效果
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_091234.png" /></p>
+<p>原因是我们给每一个平铺的渐变块旋转了45°，但平铺的渐变块不能形成一个整体的渐变，实际上需要的平铺的渐变块应该是如下的样子，需要四条颜色带而不是两条，所以我们需要设置更多的渐变起始点 color-stop<br />
+<img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_091926.png" /></p>
+<pre><code>background: linear-gradient(45deg,
+            #fb3 25%, #58a 0, #58a 50%,
+            #fb3 0, #fb3 75%, #58a 0);
+background-size: 30px 30px;
+</code></pre>
+<p>这样设置，条纹宽度会比水平或垂直方向的窄，原因如下<br />
+<img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_092408.png" /><br />
+根据勾股定理可以看出端倪，若要宽度与水平或垂直方向上的相同，r=Math.sqrt(15<em>15+15</em>15) 约21.2，21.2*2=42.4所要设置background-size:42.4px 42.4px;</p>
+<pre><code>background: linear-gradient(45deg,
+                            #fb3 25%, #58a 0, #58a 50%,
+                            #fb3 0, #fb3 75%, #58a 0);
+background-size: 42.4px 42.4px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_093110.png" /></p>
+<h3 id="_10"><a name="user-content-_10" href="#_10" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>更好的斜条纹</h3>
+<p>之前的那些方法，灵活性都不是很好，当渐变的角度设置为60,°，30°等一些其他角度时，结果看起来就会比较糟糕<br />
+如下的渐变角度设置为60°;<br />
+<img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_093807.png" /></p>
+<p>linear-gradient和radial-gradient 都有重复的一个版本<br />
+repeat-linear-gradient<br />
+repeat-radial-gradient,工作方式与之前的几乎一致，唯一不同的是渐变色的起始点会一直不断的重复下去，直到填充满整个背景图片</p>
+<pre><code>background: repeating-linear-gradient(45deg,
+#fb3, #58a 30px);
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_094302.png" /></p>
+<p>上面的代码等价于</p>
+<pre><code>background: linear-gradient(45deg,
+                            #fb3, #58a 30px,
+                            #fb3 30px, #58a 60px,
+                            #fb3 60px, #58a 90px,
+                            #fb3 90px, #58a 120px,
+                            #fb3 120px, #58a 150px, ...);
+</code></pre>
+<p>repeat-linear-gradient 善于创建条纹背景，因为自带重复属性，无需担心手动去创建渐变平铺块</p>
+<pre><code>background: repeating-linear-gradient(60deg,
+#fb3, #fb3 15px, #58a 0, #58a 30px);
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_095446.png" /><br />
+明显的好处<br />
+    1: 减少了重复的代码，<br />
+    2：在渐变中设置的起始点指定了条纹的宽度代替了background-size，而且指定的值即为条纹的宽度，省去了按倾斜角在根据勾股定理计算宽度的麻烦<br />
+    3：最主要的好处是可随意设置条纹的倾斜角度</p>
+<pre><code>background: repeating-linear-gradient(60deg,
+#fb3, #fb3 15px, #58a 0, #58a 30px);
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_100148.png" /></p>
+<p>建议：设置水平或垂直条纹时，使用linear-gradient，设置倾斜条纹时用repeat-linear-gradient 45°时，两种方法随意选择</p>
+<h3 id="_11"><a name="user-content-_11" href="#_11" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>灵活微妙的条纹</h3>
+<p>时常，我们设置的条纹并非多个颜色，有些只是同一个颜色而具有不同的亮度</p>
+<pre><code>background: repeating-linear-gradient(30deg,
+#79b, #79b 15px, #58a 0, #58a 30px);
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_100938.png" /></p>
+<p>另一种思路，将暗颜色设置为背景，然后只需要设置浅的条纹即可</p>
+<pre><code>background: #58a;
+background-image: repeating-linear-gradient(30deg,
+hsla(0,0%,100%,.1),
+hsla(0,0%,100%,.1) 15px,
+transparent 0, transparent 30px);
+</code></pre>
+<p>结果如上，这样的一个好处是当浏览器不支持渐变时，至少还有一个背景色</p>
+<h3 id="_12"><a name="user-content-_12" href="#_12" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>复杂的背景样式</h3>
+<p>前提：css gradient<br />
+      条纹背景<br />
+前面提到的都是一些条纹图案，但我们需要更多不同类型的几何图案，波点图案，棋盘图案等等。很多背景几乎都可以用css 来实现，只不过有些不太实际。太复杂的可以考虑使用css预编译器</p>
+<h4 id="_13"><a name="user-content-_13" href="#_13" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>栅格背景</h4>
+<p>原理：两个半透明渐变的叠加<br />
+<img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_102720.png" /></p>
+<pre><code>background: white;
+background-image: linear-gradient(90deg,
+                  rgba(200,0,0,.5) 50%, transparent 0),
+                  linear-gradient(
+                  rgba(200,0,0,.5) 50%, transparent 0);
+background-size: 30px 30px;
+</code></pre>
+<p>有些情况下我们想调整栅格的大小而不想改变栅格之间沟槽的大小，我们用具体的像素值而非百分比来指定渐变的起始点</p>
+<pre><code>background: #58a;
+background-image:
+linear-gradient(white 1px, transparent 0),
+linear-gradient(90deg, white 1px, transparent 0);
+background-size: 30px 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_103347.png" /></p>
+<p>可以设置栅格的大小、沟槽的大小、颜色来设置不同的图案样式</p>
+<pre><code>background: #58a;
+background-image:
+linear-gradient(white 2px, transparent 0),
+linear-gradient(90deg, white 2px, transparent 0),
+linear-gradient(hsla(0,0%,100%,.3) 1px,
+transparent 0),
+linear-gradient(90deg, hsla(0,0%,100%,.3) 1px,
+transparent 0);
+background-size: 75px 75px, 75px 75px,
+15px 15px, 15px 15px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_104036.png" /></p>
+<h4 id="_14"><a name="user-content-_14" href="#_14" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>波尔卡圆点</h4>
+<p>前提:<br />
+    径向渐变radial-gradient</p>
+<pre><code>background: #655;
+background-image: radial-gradient(tan 30%, transparent 0);
+background-size: 30px 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_104451.png" /></p>
+<p>结合两个径向渐变和background-position属性来创建波尔卡圆点<br />
+原理<br />
+<img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_104451.png" /><br />
+    background: #655;<br />
+    background-image: radial-gradient(tan 30%, transparent 0),<br />
+    radial-gradient(tan 30%, transparent 0);<br />
+    background-size: 30px 30px;<br />
+    background-position: 0 0, 15px 15px;</p>
+<h4 id="_15"><a name="user-content-_15" href="#_15" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>棋盘背景样式</h4>
+<p>1.用css方法<br />
+<img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_110916.png" /><br />
+原理是利用两个三角形拼接成一个正方形<br />
+(1)</p>
+<pre><code>background: #eee;
+background-image:
+linear-gradient(45deg, transparent 75%, #bbb 0);
+background-size: 30px 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_111948.png" /><br />
+(2)</p>
+<pre><code>background: #eee;
+background-image:
+linear-gradient(45deg, #bbb 25%, transparent 0),
+linear-gradient(45deg, transparent 75%, #bbb 0);
+background-size: 30px 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_111954.png" /><br />
+(3)</p>
+<pre><code>background-image:
+linear-gradient(45deg, #bbb 25%, transparent 0),
+linear-gradient(45deg, transparent 75%, #bbb 0),
+linear-gradient(45deg, #bbb 25%, transparent 0),
+linear-gradient(45deg, transparent 75%, #bbb 0);
+background-position: 0 0, 15px 15px,
+                     15px 15px, 30px 30px;
+background-size: 30px 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_112010.png" /></p>
+<p>我们可以调整每个三角形的颜色<br />
+2.用svg方法</p></article></body></html>
