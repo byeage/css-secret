@@ -1293,5 +1293,134 @@ background-position: 0 0, 15px 15px,
 background-size: 30px 30px;
 </code></pre>
 <p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_112010.png" /></p>
-<p>我们可以调整每个三角形的颜色<br />
-2.用svg方法</p></article></body></html>
+<p>我们可以调整每个三角形的颜色和平铺块的位置重新设置新样式</p>
+<pre><code>background: #eee;
+background-image:
+linear-gradient(45deg,
+rgba(0,0,0,.25) 25%, transparent 0,
+transparent 75%, rgba(0,0,0,.25) 0),
+linear-gradient(45deg,
+rgba(0,0,0,.25) 25%, transparent 0,
+transparent 75%, rgba(0,0,0,.25) 0);
+background-position: 0 0, 15px 15px;
+background-size: 30px 30px;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_112312.png" /></p>
+<p>2.用svg方法</p>
+<pre><code>&lt;svg xmlns="http://www.w3.org/2000/svg"
+width="100" height="100" fill-opacity=".25" &gt;
+&lt;rect x="50" width="50" height="50" /&gt;
+&lt;rect y="50" width="50" height="50" /&gt;
+&lt;/svg&gt;
+
+background: #eee url('data:image/svg+xml,\
+&lt;svg xmlns="http://www.w3.org/2000/svg" \
+    width="100" height="100"
+    fill-opacity=".25"&gt;\
+    &lt;rect x="50" width="50" height="50" /&gt; \
+    &lt;rect y="50" width="50" height="50" /&gt; \
+    &lt;/svg&gt;');
+background-size: 30px 30px;
+
+实际测试中好像不管用
+</code></pre>
+<h4 id="_16"><a name="user-content-_16" href="#_16" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>随机样式的背景</h4>
+<p>一直重复的背景看起来可能会乏味，我们想使图案看起来自然一些<br />
+1.使用多个渐变起始点</p>
+<pre><code>background: linear-gradient(90deg,
+#fb3 15%, #655 0, #655 40%,
+#ab4 0, #ab4 65%, hsl(20, 40%, 90%) 0);
+background-size: 80px 100%;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_115022.png" /></p>
+<p>2.使用多个渐变，对每个渐变设置不同的background-size</p>
+<pre><code>background: hsl(20, 40%, 90%);
+background-image:
+linear-gradient(90deg, #fb3 10px, transparent 0),
+linear-gradient(90deg, #ab4 20px, transparent 0),
+linear-gradient(90deg, #655 20px, transparent 0);
+background-size: 80px 100%, 60px 100%, 40px 100%;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_115035.png" /></p>
+<p>看起来好多了，看细看我们仍会看见平铺块在240px处开始重复，<br />
+重复块的长度为三个background-size长度的最小公倍数，所以设置好三个background-size的值，让他的最小公倍数变大即可</p>
+<pre><code>background: hsl(20, 40%, 90%);
+background-image:
+linear-gradient(90deg, #fb3 11px, transparent 0),
+linear-gradient(90deg, #ab4 23px, transparent 0),
+linear-gradient(90deg, #655 41px, transparent 0);
+background-size: 41px 100%, 61px 100%, 83px 100%;
+现在的最小公倍数=41 × 61 × 83 = 207, 583，即大于207,583px,才会重复
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_120543.png" /></p>
+<h4 id="_17"><a name="user-content-_17" href="#_17" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>图片边框</h4>
+<p>前提：css gradient<br />
+      border-image<br />
+      css animations<br />
+      striped backgrounds<br />
+有时，我们需要将某个图案或图片作为一个元素的边框而不是背景<br />
+<img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_132104.png" /></p>
+<p>方式1.两个div,外面div做背景，里面div当容器</p>
+<pre><code>&lt;div class="something-meaningful"&gt;
+    &lt;div&gt;
+        I have a nice stone art border,
+        don’t I look pretty?
+    &lt;/div&gt;
+&lt;/div&gt;
+
+.something-meaningful {
+background: url(stone-art.jpg);
+background-size: cover;
+padding: 1em;
+}
+.something-meaningful &gt; div {
+background: white;
+padding: 1em;
+}
+</code></pre>
+<p>方法2.<br />
+使用多背景，使用background-clip background-origin </p>
+<pre><code>padding: 1em;
+border: 1em solid transparent;
+background: linear-gradient(white, white),
+url(stone-art.jpg);
+background-size: cover;
+background-clip: padding-box, border-box;
+background-origin: border-box;
+</code></pre>
+<p>简写</p>
+<pre><code>padding: 1em;
+border: 1em solid transparent;
+background:
+linear-gradient(white, white) padding-box,
+url(stone-art.jpg) border-box 0 / cover;
+</code></pre>
+<p>用同样的方法可以设置渐变的边框或者条纹状的边框</p>
+<pre><code>padding: 1em;
+border: 1em solid transparent;
+background: linear-gradient(white, white) padding-box,
+            repeating-linear-gradient(-45deg,
+            red 0, red 12.5%,
+            transparent 0, transparent 25%,
+            #58a 0, #58a 37.5%,
+            transparent 0, transparent 50%)
+            0 / 5em 5em;
+</code></pre>
+<p><img alt="" src="///D://Me/CSS%20Secret/img/2015-10-23_132731.png" />      </p>
+<p>蚂蚁线边框</p>
+<pre><code>@keyframes ants { to { background-position: 100% } }
+
+
+
+
+.marching-ants {
+    padding: 1em;
+    border: 1px solid transparent;
+    background:
+    linear-gradient(white, white) padding-box,
+    repeating-linear-gradient(-45deg,
+    black 0, black 25%, white 0, white 50%
+) 0 / .6em .6em;
+    animation: ants 12s linear infinite;
+}
+</code></pre></article></body></html>
